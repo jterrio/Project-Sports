@@ -18,11 +18,14 @@ public class PlayerMovement_Combat : MonoBehaviour {
     public float charge = 0;
     private float lastPositionTime = 1f;
     private Vector3 lastPosition = Vector3.zero;
+    private Vector3 forceVector;
+    private PlayerMovement playerMovement;
 
 	// Use this for initialization
 	void Awake () {
         inCombat = false;
         combatStarted = false;
+        playerMovement = GetComponent<PlayerMovement>();
 	}
 	
 	// Update is called once per frame
@@ -59,10 +62,14 @@ public class PlayerMovement_Combat : MonoBehaviour {
             }
         }else if (powerCharging) {
             powerCharging = false;
-            if(charge > 10) {
-                charge = 10;
+            if(charge > 50) {
+                charge = 50;
             }
-            rb.AddForce(targetPosition * charge);
+            forceVector = targetPosition - transform.position;
+            forceVector.Normalize();
+            forceVector *= charge;
+            forceVector.y = 0f;
+            rb.AddForce(forceVector, ForceMode.VelocityChange);
             charge = 0;
         }
     }
@@ -71,9 +78,10 @@ public class PlayerMovement_Combat : MonoBehaviour {
 
         if (!combatStarted && CheckPositionTimer()) {
             rb.drag = 2;
+            rb.angularDrag = 1;
         } else {
             combatStarted = true;
-            rb.drag = 0.0f;
+            rb.drag = 0f;
         }
     }
 
