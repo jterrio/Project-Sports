@@ -16,6 +16,8 @@ public class PlayerMovement_Combat : MonoBehaviour {
     private bool isMoving;
     public bool powerCharging;
     public float charge = 0;
+    private float lastPositionTime = 1f;
+    private Vector3 lastPosition = Vector3.zero;
 
 	// Use this for initialization
 	void Awake () {
@@ -66,8 +68,9 @@ public class PlayerMovement_Combat : MonoBehaviour {
     }
 
     void InitCombat() {
-        if (!combatStarted && rb.velocity.magnitude >= 1f) {
-            rb.drag = 1f;
+
+        if (!combatStarted && CheckPositionTimer()) {
+            rb.drag = 2;
         } else {
             combatStarted = true;
             rb.drag = 0.0f;
@@ -79,6 +82,24 @@ public class PlayerMovement_Combat : MonoBehaviour {
             inCombat = !inCombat;
             MouseLock.MouseLocked = false;
         }
+    }
+
+    bool CheckPositionTimer() {
+        if(lastPosition == Vector3.zero) {
+            lastPosition = transform.position;
+            lastPositionTime = Time.time + 1f;
+            return true;
+        }
+        if(Time.time >= lastPositionTime) {
+            if(transform.position == lastPosition) {
+                lastPosition = Vector3.zero;
+                return false;
+            } else {
+                lastPositionTime = Time.time + 1f;
+                lastPosition = transform.position;
+                return true;
+            }
+        }return true;
     }
 
 
