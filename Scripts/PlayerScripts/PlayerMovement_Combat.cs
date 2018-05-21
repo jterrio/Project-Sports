@@ -81,8 +81,7 @@ public class PlayerMovement_Combat : MonoBehaviour {
             rb.angularDrag = 1;
         } else {
             combatStarted = true;
-            rb.drag = 0f;
-        }
+            rb.drag = 0f;        }
     }
 
     public void CheckCombat() {
