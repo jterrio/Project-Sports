@@ -11,12 +11,11 @@ public class CameraZoom : MonoBehaviour {
     public float zoom_Max = 20f;
 
     public float z;
-    private Camera mainCamera;
+    public Camera mainCamera;
     private CameraFollow cameraFollow;
 
     // Use this for initialization
     void Start() {
-        mainCamera = Camera.main;
         cameraFollow = mainCamera.GetComponent<CameraFollow>();
         z = cameraFollow.camera_Lenght;
     }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class BookScript : MonoBehaviour {
+using UnityEngine.Networking;
+public class BookScript : NetworkBehaviour {
 
     public RectTransform bookPanel;
     public GameObject closeInventoryButton, openInventoryButton;

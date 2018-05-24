@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : NetworkBehaviour {
 
     
 
@@ -15,12 +16,14 @@ public class PlayerMovement : MonoBehaviour {
     public float speed;
     public float oldSpeed;
     public PlayerMovement_Combat playerMovementC;
+    public Camera mainCamera;
+    [HideInInspector]
+    public Vector3 movement;
 
     private bool isGrounded;
     private bool inAir;
     private float moveHorizontal;
     private float moveVertical;
-    private Vector3 movement;
     private RaycastHit hit;
     private float regSpeedUpdate = 1f;
     private float angleSpeedUpdate = 1f;
@@ -33,10 +36,16 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void Update() {
+        if (!isLocalPlayer) {
+            return;
+        }
+        if (!mainCamera.gameObject.activeInHierarchy) {
+            mainCamera.gameObject.SetActive(true);
+        }
         playerMovementC.CheckCombat();
     }
 
-    // Update is called once per frame
+    
     void FixedUpdate () {
         if (!PlayerMovement_Combat.Combat) {
             // Check if the player is grounded and calculate speed
@@ -54,7 +63,7 @@ public class PlayerMovement : MonoBehaviour {
 
             // Create a Vector3 variable, and assign X and Z to feature our horizontal and vertical float variables above
             movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-            movement = Camera.main.transform.TransformDirection(movement);
+            movement = mainCamera.transform.TransformDirection(movement);
 
 
             // Add a physical force to our Player rigidbody using our 'movement' Vector3 above, 
